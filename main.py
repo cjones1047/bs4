@@ -40,15 +40,29 @@ print(first_article_score_num)
 first_article_link = first_titleline_element.next_element.get("href")
 print(first_article_link)
 
-#334388962.athing td.title span.titleline a > td:nth-child(3) > span > a
-# page = requests.get('https://news.ycombinator.com/')
-# page_text = page.text
-# tree = html.fromstring(page_text)
-# print(tree)
-# first_article_text = tree.xpath('html/body/center/table/tbody/tr[3]/td/table/tbody/tr[1]/td[3]/span/a')
-# print(first_article_text)
+print('-' * 20)
 
-#\33 4388369 > td:nth-child(3) > span > a
+sa_stock_ideas_response = requests.get("https://seekingalpha.com/stock-ideas")
+sa_stock_ideas = sa_stock_ideas_response.text
+all_tickers_mentioned_soup = BeautifulSoup(sa_stock_ideas, "html.parser")
+all_tickers_mentioned = all_tickers_mentioned_soup.find_all(class_='qE-ji')
+print(f"Length of tickers list: {len(all_tickers_mentioned)}")
+all_tickers_mentioned_set = {ticker.string for ticker in all_tickers_mentioned}
+print(f"Length of tickers set: {len(all_tickers_mentioned_set)}")
+print(all_tickers_mentioned_set)
+searched_ticker = 'TSLA'
+if searched_ticker in all_tickers_mentioned_set:
+    print(f"{searched_ticker} is in set.")
+else:
+    print(f"{searched_ticker} is NOT in set")
 
-# /html/body/center/table/tbody/tr[3]/td/table/tbody/tr[1]/td[3]/span/a
-
+searched_stock_page_response = requests.get(f"https://seekingalpha.com/symbol/{searched_ticker}")
+searched_stock_page = searched_stock_page_response.text
+searched_stock_page_soup = BeautifulSoup(searched_stock_page, "html.parser")
+searched_stock_page_price = searched_stock_page_soup.find(class_="qv-Qf aw-g1 aw-hi aw-hn")
+searched_stock_page_price_text = searched_stock_page_price.text
+print(searched_stock_page_price_text)
+searched_stock_price_string = re.search(r"[-+]?\d*\.?\d+|[-+]?\d+", searched_stock_page_price_text).group(0)
+print(f"{type(searched_stock_price_string)} {searched_stock_price_string}")
+searched_stock_price_float = float(searched_stock_price_string)
+print(f"{type(searched_stock_price_float)} {searched_stock_price_float}")
