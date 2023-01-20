@@ -66,3 +66,14 @@ searched_stock_price_string = re.search(r"[-+]?\d*\.?\d+|[-+]?\d+", searched_sto
 print(f"{type(searched_stock_price_string)} {searched_stock_price_string}")
 searched_stock_price_float = float(searched_stock_price_string)
 print(f"{type(searched_stock_price_float)} {searched_stock_price_float}")
+
+print('-' * 20)
+
+best_movies_response = requests.get('https://web.archive.org/web/20200518073855/'
+                                    'https://www.empireonline.com/movies/features/best-movies-2/')
+
+best_movies_response.raise_for_status()
+best_movies_soup = BeautifulSoup(best_movies_response.text, "html.parser")
+all_movie_title_elements = best_movies_soup.find_all(name="h3", class_="title")
+all_movies_titles = [element.text for element in all_movie_title_elements]
+print(all_movies_titles)
