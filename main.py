@@ -77,3 +77,7 @@ best_movies_soup = BeautifulSoup(best_movies_response.text, "html.parser")
 all_movie_title_elements = best_movies_soup.find_all(name="h3", class_="title")
 all_movies_titles = [element.text for element in all_movie_title_elements]
 print(all_movies_titles)
+
+with open(file='top_100_movies.txt', mode='w') as new_file:
+    for new_line in all_movies_titles[::-1]:
+        new_file.write(f"{new_line}\n")
